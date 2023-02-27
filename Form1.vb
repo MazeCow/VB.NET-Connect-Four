@@ -29,11 +29,12 @@ Public Class Form1
 
     Public game As New gamedata
 
+    Private lastwinner As String = "green"
+
     Private boardcells(6, 5) As PictureBox
     Private Sub GenerateBoard()
-        current_player = "green"
+        current_player = lastwinner
         GameBoardFLP.Controls.Clear()
-
         For y As Integer = 5 To 0 Step -1
             For x As Integer = 0 To 6
                 Dim cell As New PictureBox
@@ -54,17 +55,22 @@ Public Class Form1
         Next
     End Sub
 
-    Private hoveredcell As PictureBox
+    Public hoveredcell As PictureBox
 
     Private Sub CellEnter(sender As PictureBox, e As EventArgs)
-        Dim validcell As PictureBox = GetValidCell(sender)
-        If current_player = "green" Then
-            validcell.Image = My.Resources.green_hover
-            hoveredcell = validcell
-        ElseIf current_player = "pink" Then
-            validcell.Image = My.Resources.pink_hover
-            hoveredcell = validcell
+        If Not freezeboard Then
+            Dim validcell As PictureBox = GetValidCell(sender)
+            If current_player = "green" Then
+                validcell.Image = My.Resources.green_hover
+                hoveredcell = validcell
+
+            ElseIf current_player = "pink" Then
+                validcell.Image = My.Resources.pink_hover
+                hoveredcell = validcell
+
+            End If
         End If
+
 
     End Sub
 
@@ -76,47 +82,59 @@ Public Class Form1
         hoveredcell = Nothing
     End Sub
 
+    Public freezeboard As Boolean = False
+
     Private Sub CellClick(sender As Object, e As EventArgs)
-        If hoveredcell IsNot Nothing Then
-            Select Case current_player
-                Case "green"
-                    hoveredcell.Tag = "green"
-                    hoveredcell.Image = My.Resources.green_placed
+        If Not freezeboard Then
+            If hoveredcell IsNot Nothing Then
+                Select Case current_player
+                    Case "green"
+                        hoveredcell.Tag = "green"
+                        hoveredcell.Image = My.Resources.green_placed
 
-                Case "pink"
-                    hoveredcell.Tag = "pink"
-                    hoveredcell.Image = My.Resources.pink_placed
+                    Case "pink"
+                        hoveredcell.Tag = "pink"
+                        hoveredcell.Image = My.Resources.pink_placed
 
-            End Select
+                End Select
+            End If
+            If CheckForWin("green") Then
+                WinPopup.BackgroundImage = My.Resources.green_wins
+                green_wins += 1
+                lblGreenWins.Text = green_wins
+                freezeboard = True
+                WinPopup.Show()
+                Console.WriteLine("greenWin")
+                lastwinner = "green"
+                ResetBoard()
+
+            ElseIf CheckForWin("pink") Then
+                WinPopup.BackgroundImage = My.Resources.pink_wins
+                pink_wins += 1
+                lblPinkWins.Text = pink_wins
+                freezeboard = True
+                WinPopup.Show()
+                Console.WriteLine("pinkWin")
+                lastwinner = "pink"
+                ResetBoard()
+
+            End If
+            hoveredcell = Nothing
+            SwitchCharacters()
         End If
-        If CheckForWin("green") Then
-            WinPopup.BackgroundImage = My.Resources.green_wins
-            green_wins += 1
-            lblGreenWins.Text = green_wins
-            'WinPopup.ShowDialog()
-            Console.WriteLine("greenWin")
-            ResetBoard()
 
-        ElseIf CheckForWin("pink") Then
-            WinPopup.BackgroundImage = My.Resources.pink_wins
-            pink_wins += 1
-            lblPinkWins.Text = pink_wins
-            'WinPopup.ShowDialog()
-            Console.WriteLine("pinkWin")
-            ResetBoard()
-
-        End If
-        hoveredcell = Nothing
-        SwitchCharacters()
     End Sub
 
     Private Sub CellMouseUp(sender As PictureBox, e As EventArgs)
-        CellEnter(sender, EventArgs.Empty)
+        If Not freezeboard Then
+            CellEnter(sender, EventArgs.Empty)
+        End If
+
     End Sub
 
     Private Sub ResetBoard()
-        current_player = "green"
-        hoveredcell = Nothing
+        'hoveredcell = Nothing
+        'GenerateBoard()
     End Sub
 
     Private Function GetValidCell(sender As PictureBox) As PictureBox

@@ -48,7 +48,7 @@ Partial Class WinPopup
         Me.MinimizeBox = False
         Me.Name = "WinPopup"
         Me.ShowIcon = False
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Winner!"
         CType(Me.ok_Button, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
