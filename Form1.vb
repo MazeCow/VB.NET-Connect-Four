@@ -118,6 +118,7 @@ Public Class Form1
             End If
             If CheckForWin("green") Then
                 WinPopup.BackgroundImage = My.Resources.green_wins
+                WinPopup.Text = "Winner!"
                 green_wins += 1
                 lblGreenWins.Text = green_wins
                 freezeboard = True
@@ -125,6 +126,7 @@ Public Class Form1
                 lastwinner = "green"
             ElseIf CheckForWin("pink") Then
                 WinPopup.BackgroundImage = My.Resources.pink_wins
+                WinPopup.Text = "Winner!"
                 pink_wins += 1
                 lblPinkWins.Text = pink_wins
                 freezeboard = True
@@ -138,6 +140,7 @@ Public Class Form1
                    CheckForFullColumn(5) AndAlso
                    CheckForFullColumn(6) Then
                 WinPopup.BackgroundImage = My.Resources.nobody_wins
+                WinPopup.Text = "No Winner!"
                 freezeboard = True
                 WinPopup.Show()
             End If
