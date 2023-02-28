@@ -71,6 +71,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        '''</summary>
+        Friend ReadOnly Property _error() As System.IO.UnmanagedMemoryStream
+            Get
+                Return ResourceManager.GetStream("_error", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        '''</summary>
+        Friend ReadOnly Property error_easter_egg() As System.IO.UnmanagedMemoryStream
+            Get
+                Return ResourceManager.GetStream("error_easter_egg", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property green_hover() As System.Drawing.Bitmap
@@ -86,16 +104,6 @@ Namespace My.Resources
         Friend ReadOnly Property green_placed() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("green_placed", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Bitmap.
-        '''</summary>
-        Friend ReadOnly Property green_win() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("green_win", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
@@ -186,16 +194,6 @@ Namespace My.Resources
         Friend ReadOnly Property pink_placed() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("pink_placed", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized resource of type System.Drawing.Bitmap.
-        '''</summary>
-        Friend ReadOnly Property pink_win() As System.Drawing.Bitmap
-            Get
-                Dim obj As Object = ResourceManager.GetObject("pink_win", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

@@ -1,5 +1,6 @@
 ﻿Public Class WinPopup
     Private Sub OkButton_Click(sender As Object, e As EventArgs) Handles ok_Button.Click
+        Form1.GenerateBoard()
         Form1.freezeboard = False
         Me.Close()
     End Sub
@@ -19,6 +20,7 @@
     End Sub
 
     Private Sub WinPopup_Load(sender As Object, e As EventArgs) Handles MyBase.Closed
+        Form1.GenerateBoard()
         Form1.freezeboard = False
     End Sub
 End Class

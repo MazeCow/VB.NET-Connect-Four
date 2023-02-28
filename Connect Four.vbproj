@@ -80,10 +80,10 @@
       <DependentUpon>Form1.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GreenWin.Designer.vb">
-      <DependentUpon>GreenWin.vb</DependentUpon>
+    <Compile Include="Popup.Designer.vb">
+      <DependentUpon>Popup.vb</DependentUpon>
     </Compile>
-    <Compile Include="GreenWin.vb">
+    <Compile Include="Popup.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -107,8 +107,8 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GreenWin.resx">
-      <DependentUpon>GreenWin.vb</DependentUpon>
+    <EmbeddedResource Include="Popup.resx">
+      <DependentUpon>Popup.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -192,6 +192,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ok_down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\error_easter_egg.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\error.mp3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\error_easter_egg.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\error.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

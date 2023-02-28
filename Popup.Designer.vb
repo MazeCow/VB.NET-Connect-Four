@@ -50,6 +50,7 @@ Partial Class WinPopup
         Me.ShowIcon = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Winner!"
+        Me.TopMost = True
         CType(Me.ok_Button, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()

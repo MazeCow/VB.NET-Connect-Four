@@ -2,6 +2,8 @@
 Option Explicit On
 
 Imports System.Drawing.Text
+Imports System.IO
+Imports System.Media
 Imports System.Runtime.InteropServices
 Imports Connect_Four.Form1.gamedata
 Imports Microsoft.VisualBasic.ApplicationServices
@@ -17,8 +19,21 @@ Public Class Form1
         Dim fontFamily As System.Drawing.FontFamily = fontCollection.Families(0)
         Dim font As New System.Drawing.Font(fontFamily, 12)
         Marshal.FreeCoTaskMem(fontDataPtr)
-        '-
+
+        For Each thing As Control In {lblPinkWins, lblGreenWins, PictureBox1, GameBoardFLP, Me}
+            AddHandler thing.KeyPress, AddressOf ErrorClick
+            AddHandler thing.Click, AddressOf ErrorClick
+        Next
+
         GenerateBoard()
+    End Sub
+
+
+
+    Private Sub ErrorClick(sender As Object, e As EventArgs)
+        If freezeboard Then
+            My.Computer.Audio.PlaySystemSound(SystemSounds.Beep)
+        End If
     End Sub
 
     Structure gamedata
@@ -32,7 +47,7 @@ Public Class Form1
     Private lastwinner As String = "green"
 
     Private boardcells(6, 5) As PictureBox
-    Private Sub GenerateBoard()
+    Public Sub GenerateBoard()
         current_player = lastwinner
         GameBoardFLP.Controls.Clear()
         For y As Integer = 5 To 0 Step -1
@@ -49,6 +64,8 @@ Public Class Form1
                 AddHandler cell.MouseLeave, AddressOf CellExit
                 AddHandler cell.MouseDown, AddressOf CellClick
                 AddHandler cell.MouseUp, AddressOf CellMouseUp
+                AddHandler cell.Click, AddressOf ErrorClick
+                AddHandler cell.KeyPress, AddressOf ErrorClick
                 boardcells(x, y) = cell
                 GameBoardFLP.Controls.Add(cell)
             Next
@@ -61,17 +78,17 @@ Public Class Form1
         If Not freezeboard Then
             Dim validcell As PictureBox = GetValidCell(sender)
             If current_player = "green" Then
-                validcell.Image = My.Resources.green_hover
+                If validcell IsNot Nothing Then
+                    validcell.Image = My.Resources.green_hover
+                End If
                 hoveredcell = validcell
-
             ElseIf current_player = "pink" Then
-                validcell.Image = My.Resources.pink_hover
+                If validcell IsNot Nothing Then
+                    validcell.Image = My.Resources.pink_hover
+                End If
                 hoveredcell = validcell
-
             End If
         End If
-
-
     End Sub
 
     Private Sub CellExit(sender As PictureBox, e As EventArgs)
@@ -97,6 +114,7 @@ Public Class Form1
                         hoveredcell.Image = My.Resources.pink_placed
 
                 End Select
+                SwitchCharacters()
             End If
             If CheckForWin("green") Then
                 WinPopup.BackgroundImage = My.Resources.green_wins
@@ -104,26 +122,37 @@ Public Class Form1
                 lblGreenWins.Text = green_wins
                 freezeboard = True
                 WinPopup.Show()
-                Console.WriteLine("greenWin")
                 lastwinner = "green"
-                ResetBoard()
-
             ElseIf CheckForWin("pink") Then
                 WinPopup.BackgroundImage = My.Resources.pink_wins
                 pink_wins += 1
                 lblPinkWins.Text = pink_wins
                 freezeboard = True
                 WinPopup.Show()
-                Console.WriteLine("pinkWin")
                 lastwinner = "pink"
-                ResetBoard()
-
+            ElseIf CheckForFullColumn(0) AndAlso
+                   CheckForFullColumn(1) AndAlso
+                   CheckForFullColumn(2) AndAlso
+                   CheckForFullColumn(3) AndAlso
+                   CheckForFullColumn(4) AndAlso
+                   CheckForFullColumn(5) AndAlso
+                   CheckForFullColumn(6) Then
+                WinPopup.BackgroundImage = My.Resources.nobody_wins
+                freezeboard = True
+                WinPopup.Show()
             End If
-            hoveredcell = Nothing
-            SwitchCharacters()
-        End If
 
+        End If
+        hoveredcell = Nothing
     End Sub
+
+    Private Function CheckForFullColumn(x As Integer)
+        Dim full As Boolean = True
+        For y As Integer = 0 To 5
+            If boardcells(x, y).Tag = "empty" Then full = False
+        Next
+        Return full
+    End Function
 
     Private Sub CellMouseUp(sender As PictureBox, e As EventArgs)
         If Not freezeboard Then
@@ -132,25 +161,21 @@ Public Class Form1
 
     End Sub
 
-    Private Sub ResetBoard()
-        'hoveredcell = Nothing
-        'GenerateBoard()
-    End Sub
-
     Private Function GetValidCell(sender As PictureBox) As PictureBox
         Dim c = FindIndex(boardcells, sender)
-        Console.WriteLine(c(0).ToString & ", " & c(1).ToString)
-        Dim y As Integer = c(1)
-        Dim boardheight As Integer = boardcells.GetLength(1) - 1
-        For i As Integer = boardheight To 0 Step -1
-            If boardcells(c(0), i).Tag <> "empty" Then
-                If i + 1 < boardcells.GetLength(1) Then
-                    Return boardcells(c(0), i + 1)
-                End If
+        If Not CheckForFullColumn(c(0)) Then
+            Dim y As Integer = c(1)
+            Dim boardheight As Integer = boardcells.GetLength(1) - 1
+            For i As Integer = boardheight To 0 Step -1
+                If boardcells(c(0), i).Tag <> "empty" Then
+                    If i + 1 < boardcells.GetLength(1) Then
+                        Return boardcells(c(0), i + 1)
+                    End If
 
-            End If
-        Next
-        Return boardcells(c(0), 0)
+                End If
+            Next
+            Return boardcells(c(0), 0)
+        End If
     End Function
 
     Private Sub SwitchCharacters()
@@ -227,6 +252,8 @@ Public Class Form1
         Return False
     End Function
 
+    Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
 
+    End Sub
 End Class
 
